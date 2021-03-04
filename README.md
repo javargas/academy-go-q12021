@@ -167,6 +167,3 @@ For submitting your work, you should follow these steps:
 - [Functions as values](https://tour.golang.org/moretypes/24)
 - [Concurrency (goroutines, channels, workers)](https://medium.com/@trevor4e/learning-gos-concurrency-through-illustrations-8c4aff603b3)
   - [Concurrency Part 2](https://www.youtube.com/watch?v=LvgVSSpwND8)
-
-
-changed
