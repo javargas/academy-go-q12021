@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This poroject is about a consta list page. 
+This poroject is about a contact list page. 
 
 - http://localhost:10000/  Render the Home page. 
 - http://localhost:10000/get-contacts  Render all contact list
