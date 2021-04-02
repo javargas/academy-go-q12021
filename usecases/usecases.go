@@ -5,13 +5,13 @@ import (
     "log"
 	"net/http"
 	"encoding/json"
+	"strconv"
 
 	"github.com/javargas/academy-go-q12021/entities"
 	"github.com/javargas/academy-go-q12021/repository"
 	"github.com/javargas/academy-go-q12021/services"
 )
 
-var jobList = repository.LoadData()
 
 func HomePageHandler(w http.ResponseWriter, r *http.Request){
     fmt.Fprintf(w, "Welcome to the HomePage!")
@@ -19,11 +19,16 @@ func HomePageHandler(w http.ResponseWriter, r *http.Request){
 }
 
 func GetJobListHandler(w http.ResponseWriter, r *http.Request) {
+
+	var jobList = repository.LoadData()
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(jobList)
 }
 
 func GetJobInfoHandler(w http.ResponseWriter, r *http.Request){
+
+	var jobList = repository.LoadData()
+
 	keys, ok := r.URL.Query()["id"]
     
     if !ok || len(keys[0]) < 1 {
@@ -55,5 +60,36 @@ func GetJobsAPIPHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(job)
+	}
+}
+
+func GetJobsConcurrentPHandler(w http.ResponseWriter, r *http.Request) {
+
+	keys, ok := r.URL.Query()["type"]
+    
+    if !ok || len(keys[0]) < 1 {
+        fmt.Fprintf(w, "Url Param 'type' is missing")
+        log.Println("Url Param 'type' is missing")
+        return
+	}
+	typeNumber := keys[0]
+
+	if typeNumber == "even" || typeNumber == "odd" {
+		itemsS := r.FormValue("items")
+		itemsPerWorkerS := r.FormValue("items_per_worker")
+
+		items, _ := strconv.Atoi(itemsS)
+		itemsPerWorker, _ := strconv.Atoi(itemsPerWorkerS)
+
+		jobs, _ := services.GetJobsConcurrently(typeNumber, items, itemsPerWorker)
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(typeNumber + " " + itemsS + " " + itemsPerWorkerS)
+		json.NewEncoder(w).Encode(&jobs)
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, `{ "message": "You only can use "even" or "odd"" }`)
+		// fmt.Fprintln(w, "You only can use \"even\" or \"odd\"")
 	}
 }
