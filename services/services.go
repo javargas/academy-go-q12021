@@ -76,7 +76,7 @@ func GetJobsConcurrently(typeNumber string, items int, itemsPerWorker int) ([]en
 	poolSize := calculatePoolSize(items, itemsPerWorker, totalJobs)
 	maxJobs := calculateMaxJobs(totalJobs)
 
-	values := make(chan int)
+	values := make(chan string)
 	tasks := make(chan int, poolSize)
 	shutdown := make(chan struct{})
 
