@@ -92,10 +92,6 @@ func GetJobsConcurrentPHandler(w http.ResponseWriter, r *http.Request) {
 
 	if typeNumber == "even" || typeNumber == "odd" {
 
-		
-		//itemsS := r.FormValue("items")
-		//itemsPerWorkerS := r.FormValue("items_per_worker")
-
 		items, _ := strconv.Atoi(itemsS)
 		itemsPerWorker, _ := strconv.Atoi(itemsPerWorkerS)
 
