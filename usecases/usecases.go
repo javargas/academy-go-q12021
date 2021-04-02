@@ -73,10 +73,28 @@ func GetJobsConcurrentPHandler(w http.ResponseWriter, r *http.Request) {
         return
 	}
 	typeNumber := keys[0]
+    
+	keys1, ok1 := r.URL.Query()["items"]
+    if !ok1 || len(keys1[0]) < 1 {
+        fmt.Fprintf(w, "Url Param 'items' is missing")
+        log.Println("Url Param 'items' is missing")
+        return
+	}
+	itemsS := keys1[0]
+    
+	keys2, ok2 := r.URL.Query()["items_per_worker"]
+    if !ok2 || len(keys2[0]) < 1 {
+        fmt.Fprintf(w, "Url Param 'items_per_worker' is missing")
+        log.Println("Url Param 'items_per_worker' is missing")
+        return
+	}
+	itemsPerWorkerS := keys2[0]
 
 	if typeNumber == "even" || typeNumber == "odd" {
-		itemsS := r.FormValue("items")
-		itemsPerWorkerS := r.FormValue("items_per_worker")
+
+		
+		//itemsS := r.FormValue("items")
+		//itemsPerWorkerS := r.FormValue("items_per_worker")
 
 		items, _ := strconv.Atoi(itemsS)
 		itemsPerWorker, _ := strconv.Atoi(itemsPerWorkerS)

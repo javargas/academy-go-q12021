@@ -76,7 +76,7 @@ func GetJobsConcurrently(typeNumber string, items int, itemsPerWorker int) ([]en
 	poolSize := calculatePoolSize(items, itemsPerWorker, totalJobs)
 	maxJobs := calculateMaxJobs(totalJobs)
 
-	values := make(chan string)
+	values := make(chan int, totalJobs)
 	tasks := make(chan int, poolSize)
 	shutdown := make(chan struct{})
 
@@ -91,7 +91,7 @@ func GetJobsConcurrently(typeNumber string, items int, itemsPerWorker int) ([]en
 	for i := 0; i < poolSize; i++ {
 		go func(jobs <-chan int) {
 			for {
-				var id string
+				var id int
 				var limitRecalculated int
 				start := <-jobs
 
@@ -104,7 +104,8 @@ func GetJobsConcurrently(typeNumber string, items int, itemsPerWorker int) ([]en
 				}
 
 				for j := start; j < limitRecalculated; j++ {
-					id = jobList[j].Uuid
+					//id = jobList[j].Uuid
+					id = j
 
 					select {
 					case values <- id:
@@ -123,21 +124,21 @@ func GetJobsConcurrently(typeNumber string, items int, itemsPerWorker int) ([]en
 	}
 	close(tasks)
 
-	var filteredPokemons []entities.Job = nil
+	var filteredJobs []entities.Job = nil
 	bucket := make(map[int]int, totalJobs+1)
 	for elem := range values {
 		if typeNumber == filterType.Odd {
 			if elem%2 != 0 && bucket[elem] == 0 {
-				filteredPokemons = append(filteredPokemons, pokemons[elem-1])
+				filteredJobs = append(filteredJobs, jobList[elem-1])
 				bucket[elem] = elem // we use the map to mark the ones that has been added to the collection
 			}
 		} else if typeNumber == filterType.Even {
 			if elem%2 == 0 && bucket[elem] == 0 {
-				filteredPokemons = append(filteredPokemons, pokemons[elem-1])
+				filteredJobs = append(filteredJobs, jobList[elem-1])
 				bucket[elem] = elem // we use the map to mark the ones that has been added to the collection
 			}
 		}
-		if len(filteredPokemons) >= items || len(filteredPokemons) >= maxJobs {
+		if len(filteredJobs) >= items || len(filteredJobs) >= maxJobs {
 			break // Finally if we reahc the items value or the possibly half that we cna take, break the loop
 		}
 	}
@@ -147,5 +148,5 @@ func GetJobsConcurrently(typeNumber string, items int, itemsPerWorker int) ([]en
 
 	wg.Wait()
 
-	return filteredPokemons, nil
+	return filteredJobs, nil
 }
