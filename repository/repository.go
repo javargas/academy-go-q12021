@@ -13,7 +13,7 @@ const pathFile = "./DataJobs.csv"
 
 func LoadData() []entities.Job {
 
-	var jobList  []entities.Job = nil
+	jobList := []entities.Job{}
 
 	// Open the file
 	csvfile, err := os.Open(pathFile)
