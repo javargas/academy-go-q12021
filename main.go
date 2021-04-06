@@ -10,8 +10,9 @@ import (
 
 func handleRequests() {
 	http.HandleFunc("/", usecases.HomePageHandler)
-	http.HandleFunc("/get-contacts", usecases.GetContactListHandler)
-	http.HandleFunc("/get-contact-info", usecases.GetContactInfoHandler)
+	http.HandleFunc("/get-jobs", usecases.GetJobListHandler)
+	http.HandleFunc("/get-job-info", usecases.GetJobInfoHandler)
+	http.HandleFunc("/get-jobs-api", usecases.GetJobsAPIPHandler)
     log.Fatal(http.ListenAndServe(":10000", nil))
 }
 
