@@ -10,6 +10,7 @@ import (
 	"github.com/javargas/academy-go-q12021/entities"
 )
 const pathFile = "./DataJobs.csv"
+const permissonFile = 0600
 
 func LoadData() []entities.Job {
 
@@ -49,7 +50,7 @@ func LoadData() []entities.Job {
 func WriteInCSV(model entities.Job) (*os.File, error) {
 
 	s := make([]string, 0)
-	f, err := os.OpenFile(pathFile, os.O_APPEND|os.O_WRONLY, 0600)
+	f, err := os.OpenFile(pathFile, os.O_APPEND|os.O_WRONLY, permissonFile)
 
 	if err != nil {
         log.Fatalln("failed to open file", err)

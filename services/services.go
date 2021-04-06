@@ -94,29 +94,27 @@ func GetJobsConcurrently(typeNumber string, items int, itemsPerWorker int) ([]en
 
 	for i := 0; i < poolSize; i++ {
 		go func(jobs <-chan int) {
-			for {
-				var id int
-				var limitRecalculated int
-				start := <-jobs
+			var id int
+			var limitRecalculated int
+			start := <-jobs
 
-				// We do need to iterate with the same limit every time.
-				// on the last cycle we use the leftovers of the division (modulus)
-				if limit+start >= totalJobs && lastLimit != 0 { // lastLimit can be 0, take care of that
-					limitRecalculated = start + lastLimit
-				} else {
-					limitRecalculated = start + limit
-				}
+			// We do need to iterate with the same limit every time.
+			// on the last cycle we use the leftovers of the division (modulus)
+			if limit+start >= totalJobs && lastLimit != 0 { // lastLimit can be 0, take care of that
+				limitRecalculated = start + lastLimit
+			} else {
+				limitRecalculated = start + limit
+			}
 
-				for j := start; j < limitRecalculated; j++ {
-					//id = jobList[j].Uuid
-					id = j
+			for j := start; j < limitRecalculated; j++ {
+				//id = jobList[j].Uuid
+				id = j
 
-					select {
-					case values <- id:
-					case <-shutdown:
-						wg.Done()
-						return
-					}
+				select {
+				case values <- id:
+				case <-shutdown:
+					wg.Done()
+					return
 				}
 			}
 		}(tasks)

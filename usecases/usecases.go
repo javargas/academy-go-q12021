@@ -104,6 +104,5 @@ func GetJobsConcurrentPHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprint(w, `{ "message": "You only can use "even" or "odd"" }`)
-		// fmt.Fprintln(w, "You only can use \"even\" or \"odd\"")
 	}
 }
