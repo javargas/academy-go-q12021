@@ -2,11 +2,14 @@
 
 ## Introduction
 
-This poroject is about a contact list page. 
+This project is about a jobs list page. 
 
 - http://localhost:10000/  Render the Home page. 
-- http://localhost:10000/get-contacts  Render all contact list
-- http://localhost:10000/get-contact-info?id=1 Render the contatc Info of a contact with id: 1
+- http://localhost:10000/get-jobs  Render all job list
+- http://localhost:10000/get-job-info?id=1 Render the job Info of a contact with id: 1
+- http://localhost:10000/get-jobs-api?id=1 Fetch job data from API
+
+API: https://github.com/workforce-data-initiative/skills-api/wiki/API-Overview
 
 
 ## How to run
